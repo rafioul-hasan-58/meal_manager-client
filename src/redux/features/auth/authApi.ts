@@ -1,0 +1,139 @@
+// redux/features/auth/authApi.ts
+import { baseApi } from "../../api/baseApi";
+
+const authApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    // Login with email/password
+    login: builder.mutation({
+      query: (authInfo) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: authInfo,
+      }),
+      invalidatesTags: ["auth"],
+    }),
+
+    // Login with Google
+    loginWithGoogle: builder.mutation({
+      query: (authInfo) => {
+        console.log("Google Login Request:", authInfo);
+        return {
+          url: "/auth/google-login",
+          method: "POST",
+          body: authInfo,
+        };
+      },
+      invalidatesTags: ["auth"],
+    }),
+
+    // Register new auth
+    register: builder.mutation({
+      query: (data) => ({
+        url: "/user/register",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["auth"],
+    }),
+
+    // Verify OTP
+    verifyOtp: builder.mutation({
+      query: (data) => ({
+        url: "/auth/verify-otp",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["auth"],
+    }),
+    reSendOtp: builder.mutation({
+      query: (authInfo) => ({
+        url: "/auth/resend-otp",
+        method: "POST",
+        body: authInfo,
+      }),
+      invalidatesTags: ["auth"],
+    }),
+
+    // Forgot password
+    forgotPassword: builder.mutation({
+      query: (email) => {
+        return {
+          url: "/auth/forgot-password",
+          method: "POST",
+          body: email,
+        };
+      },
+    }),
+
+    // Reset password (with token from email)
+    newPassword: builder.mutation({
+      query: (authInfo) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: authInfo,
+      }),
+    }),
+
+    // Change password (authenticated auth)
+    resetPassword: builder.mutation({
+      query: (authInfo) => ({
+        url: "/auth/change-password",
+        method: "PATCH",
+        body: authInfo,
+      }),
+      invalidatesTags: ["auth"],
+    }),
+
+    // Get current auth profile
+    getMe: builder.query({
+      query: () => ({
+        url: "/user/my-profile",
+        method: "GET",
+      }),
+      providesTags: ["auth", "profile"],
+    }),
+
+    // Update auth profile
+    updateauth: builder.mutation({
+      query: (formData) => ({
+        url: "/auth/update-profile",
+        method: "PATCH",
+        body: formData,
+      }),
+      invalidatesTags: ["auth", "profile"],
+    }),
+    updateProfile: builder.mutation({
+      query: (formData) => ({
+        url: "/user/update-profile",
+        method: "PATCH",
+        body: formData,
+      }),
+      invalidatesTags: ["auth", "profile"],
+    }),
+    userUpdateProfileNotification: builder.mutation({
+      query: (data) => ({
+        url: "/user/update-profile",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["auth", "profile"],
+    }),
+  }),
+});
+
+export const {
+  useLoginMutation,
+  useLoginWithGoogleMutation,
+  useRegisterMutation,
+  useVerifyOtpMutation,
+  useReSendOtpMutation,
+  useForgotPasswordMutation,
+  useNewPasswordMutation,
+  useResetPasswordMutation,
+  useGetMeQuery,
+  useUpdateauthMutation,
+  useUpdateProfileMutation,
+  useUserUpdateProfileNotificationMutation,
+} = authApi;
+
+export default authApi;
