@@ -14,12 +14,12 @@ const Nav = () => {
 
         <div className="flex items-center gap-4">
           <Link href="/register">
-            <button className="bg-[#0B1F3A] text-white hover:opacity-90 px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
+            <button className="bg-[#0B1F3A] text-white hover:bg-blue-50 px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
               Sign Up
             </button>
           </Link>
           <Link href="/login">
-            <button className="border-2 border-[#0B1F3A] text-[#0B1F3A] hover:bg-white/10 px-6 py-2 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
+            <button className="border-2 border-white text-white hover:bg-white/10 px-6 py-2 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
               Login
             </button>
           </Link>

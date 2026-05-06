@@ -32,7 +32,7 @@ const features = [
 
 const Hero = () => {
     return (
-        <section className="max-w-7xl mx-auto px-6 py-16 flex flex-col lg:flex-row items-center gap-12">
+        <section className="max-w-7xl mx-auto px-6 py-4 flex flex-col lg:flex-row items-center gap-12">
             {/* Left */}
             <div className="w-full lg:w-1/2 flex flex-col">
                 <span className="text-xs text-blue-400 font-semibold tracking-widest uppercase mb-5">
