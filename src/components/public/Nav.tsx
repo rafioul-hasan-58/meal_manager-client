@@ -1,27 +1,32 @@
 import Image from "next/image"
 import logo from "../../assets/logo.png"
 import Link from "next/link"
+
 const Nav = () => {
   return (
-    <div className="max-w-7xl mx-auto  flex justify-between">
-      <aside className="flex items-center gap-5">
-        <Image src={logo} alt="appLogo" height={60} width={60} />
-        <h1 className="text-2xl font-semibold text-gray-400">Meal Management System</h1>
-      </aside>
-      <aside className="flex items-center gap-5">
-        <Link href="/register">
-          <button className="bg-linear-to-r from-blue-500 to-blue-700 text-white px-6 py-2 rounded-lg font-semibold cursor-pointer">
-            Sign Up
-          </button>
-        </Link>
+    <nav className="sticky top-0 z-50 bg-linear-to-r from-blue-500 to-blue-700 border-b border-white/10 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
 
-        <Link href="/login">
-          <button className="border-blue-500 border-2 px-6 py-2 rounded-lg text-blue-500 font-semibold cursor-pointer">
-            Login
-          </button>
-        </Link>
-      </aside>
-    </div>
+        <div className="flex items-center gap-3">
+          <Image className="rounded-sm" src={logo} alt="App logo" height={50} width={50} />
+          <h1 className="text-xl font-semibold text-white">Meal Management System</h1>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Link href="/register">
+            <button className="bg-[#0B1F3A] text-white hover:opacity-90 px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
+              Sign Up
+            </button>
+          </Link>
+          <Link href="/login">
+            <button className="border-2 border-[#0B1F3A] text-[#0B1F3A] hover:bg-white/10 px-6 py-2 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
+              Login
+            </button>
+          </Link>
+        </div>
+
+      </div>
+    </nav>
   )
 }
 
