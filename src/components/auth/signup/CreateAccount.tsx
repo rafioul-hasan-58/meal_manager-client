@@ -24,7 +24,7 @@ const CreateAccount = ({ formData, handleChange, handlePhotoUpload, nextStep, pr
         formData.phone;
 
     return (
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden">
+        <div className="bg-white lg:rounded-2xl lg:shadow-xl w-full max-w-md lg:mx-4 overflow-hidden">
             {/* Header */}
             <div className="bg-linear-to-r from-blue-500 to-blue-700 px-8 pt-6 pb-4">
                 <StepIndicator currentStep={2} />

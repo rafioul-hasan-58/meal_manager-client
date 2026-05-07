@@ -9,13 +9,15 @@ import VerifyEmail from "./VerifyEmail"; // 👈 new import
 import { useRegisterMutation } from "@/src/redux/features/user/userApi";
 import toast from "react-hot-toast";
 import { decodeToken } from "@/src/utils/jwtdecoder";
+import { useAppDispatch } from "@/src/redux/hooks";
+import { setCredentials } from "@/src/redux/features/auth/authSlice";
 
 
 const Register = () => {
   const [step, setStep] = useState(1);
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
-
+  const dispatch = useAppDispatch();
   const [register, { isLoading }] = useRegisterMutation();
   const [formData, setFormData] = useState<IRegister>({
     fullName: "",
@@ -69,16 +71,16 @@ const Register = () => {
 
       if (response.success) {
         toast.success("User registered successfully!");
-        console.log("Access Token:", response.data.accessToken);
+        dispatch(setCredentials({ access_token: response.data.accessToken }));
         const decodedToken = decodeToken(response.data.accessToken);
-        window.location.href=`/dashboard/${decodedToken.globalRole === "admin" ? "admin" : "user"}`; // Redirect based on role
+        window.location.href = `/dashboard/${decodedToken.globalRole === "admin" ? "admin" : "user"}`;
       }
     } catch (err: any) {
       const errorMessage =
         err?.data?.message ||
         err?.data?.errorMessages?.[0]?.message ||
         "Registration failed. Please try again.";
-        console.log("Registration Error:", err);
+      console.log("Registration Error:", err);
       toast.error(errorMessage);
     }
   };

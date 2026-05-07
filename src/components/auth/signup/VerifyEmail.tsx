@@ -103,7 +103,7 @@ const VerifyEmail = ({ email, nextStep, prevStep }: VerifyEmailProps) => {
 
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md mx-4">
+    <div className="bg-white lg:rounded-2xl shadow-lg p-8 w-full max-w-md lg:mx-4">
       {/* Shake keyframe injected via style tag */}
       <style>{`
         @keyframes shake {
