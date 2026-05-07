@@ -1,9 +1,28 @@
 // redux/features/auth/authApi.ts
+import { API_ENDPOINTS } from "@/src/config/api";
 import { baseApi } from "../../api/baseApi";
+import { IOtpPayload, IOtpResponse, IVerifyOtpPayload, IVerifyOtpResponse } from "@/src/types/auth";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+
     // Login with email/password
+    verifyEmail: builder.mutation<IOtpResponse, IOtpPayload>({
+      query: (payload) => ({
+        url: API_ENDPOINTS.AUTH.VERIFY_EMAIL,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["auth"],
+    }),
+    verifyOtp: builder.mutation<IVerifyOtpResponse, IVerifyOtpPayload>({
+      query: (payload) => ({
+        url: API_ENDPOINTS.AUTH.VERIFY_OTP,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["auth"],
+    }),
     login: builder.mutation({
       query: (authInfo) => ({
         url: "/auth/login",
@@ -30,16 +49,6 @@ const authApi = baseApi.injectEndpoints({
     register: builder.mutation({
       query: (data) => ({
         url: "/user/register",
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: ["auth"],
-    }),
-
-    // Verify OTP
-    verifyOtp: builder.mutation({
-      query: (data) => ({
-        url: "/auth/verify-otp",
         method: "POST",
         body: data,
       }),
@@ -122,6 +131,7 @@ const authApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useVerifyEmailMutation,
   useLoginMutation,
   useLoginWithGoogleMutation,
   useRegisterMutation,

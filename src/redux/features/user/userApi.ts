@@ -6,11 +6,11 @@ import { IRegisterPayload, IRegisterResponse } from "@/src/types/register";
 const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // Login with email/password
-        register: builder.mutation<IRegisterResponse,IRegisterPayload>({
-            query: (body) => ({
+        register: builder.mutation<IRegisterResponse, IRegisterPayload>({
+            query: (payload) => ({
                 url: API_ENDPOINTS.USER.REGISTER,
                 method: "POST",
-                body,
+                body: payload,
             }),
             invalidatesTags: ["user"],
         })

@@ -1,6 +1,9 @@
 "use client";
 import { useState, useRef } from "react";
 import StepIndicator from "./StepIndicator";
+import { useVerifyEmailMutation, useVerifyOtpMutation } from "@/src/redux/features/auth/authApi";
+import { Loader } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface VerifyEmailProps {
   email: string;
@@ -12,15 +15,29 @@ const OTP_LENGTH = 6;
 
 const VerifyEmail = ({ email, nextStep, prevStep }: VerifyEmailProps) => {
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
-  const [isResending, setIsResending] = useState(false);
   const [resendMsg, setResendMsg] = useState("");
   const [error, setError] = useState("");
+  const [isShaking, setIsShaking] = useState(false); // ✅ shake state
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useVerifyEmailMutation();
+
+  // ✅ Trigger shake + clear OTP on failure
+  const triggerError = (message: string) => {
+    setError(message);
+    setIsShaking(true);
+
+    setTimeout(() => {
+      setOtp(Array(OTP_LENGTH).fill(""));
+      setIsShaking(false);
+      inputRefs.current[0]?.focus();
+    }, 500); // shake duration
+  };
 
   const handleChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return; // digits only
+    if (!/^\d*$/.test(value)) return;
     const updated = [...otp];
-    updated[index] = value.slice(-1); // keep last digit
+    updated[index] = value.slice(-1);
     setOtp(updated);
     setError("");
     if (value && index < OTP_LENGTH - 1) {
@@ -42,32 +59,70 @@ const VerifyEmail = ({ email, nextStep, prevStep }: VerifyEmailProps) => {
     }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     const code = otp.join("");
     if (code.length < OTP_LENGTH) {
-      setError("Please enter the complete 6-digit code.");
+      triggerError("Please enter the complete 6-digit code.");
       return;
     }
-    // TODO: call your verify-email API with `code` here
-    console.log("Verifying OTP:", code);
-    nextStep();
+    try {
+      const response = await verifyOtp({ email, otp: code }).unwrap();
+      if (response.success) {
+        toast.success("Email verified successfully!");
+        nextStep();
+      }
+    } catch (err: any) {
+      const errorMessage =
+        err?.data?.message ||
+        err?.data?.errorMessages?.[0]?.message ||
+        "Verification failed. Please try again.";
+
+      toast.error(errorMessage);
+      triggerError(errorMessage); // ✅ shake + clear on API error
+    }
   };
 
   const handleResend = async () => {
-    setIsResending(true);
     setResendMsg("");
-    // TODO: call your resend-otp API here
-    await new Promise((r) => setTimeout(r, 1000)); // simulate request
-    setIsResending(false);
-    setResendMsg("A new code has been sent!");
-    setOtp(Array(OTP_LENGTH).fill(""));
-    inputRefs.current[0]?.focus();
+    try {
+      const response = await resendOtp({ email }).unwrap();
+      if (response.success) {
+        setResendMsg("A new code has been sent!");
+        setOtp(Array(OTP_LENGTH).fill(""));
+        setError("")
+        inputRefs.current[0]?.focus();
+      }
+    } catch (err: any) {
+      const errorMessage =
+        err?.data?.message ||
+        err?.data?.errorMessages?.[0]?.message ||
+        "Failed to resend OTP. Please try again.";
+      toast.error(errorMessage);
+    }
   };
+
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md mx-4">
+      {/* Shake keyframe injected via style tag */}
+      <style>{`
+        @keyframes shake {
+          0%   { transform: translateX(0); }
+          15%  { transform: translateX(-6px); }
+          30%  { transform: translateX(6px); }
+          45%  { transform: translateX(-6px); }
+          60%  { transform: translateX(6px); }
+          75%  { transform: translateX(-4px); }
+          90%  { transform: translateX(4px); }
+          100% { transform: translateX(0); }
+        }
+        .shake {
+          animation: shake 0.6s ease;
+        }
+      `}</style>
+
       {/* Header */}
-       <StepIndicator currentStep={4} />
+      <StepIndicator currentStep={4} />
       <div className="text-center mb-6">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-4">
           <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,7 +137,11 @@ const VerifyEmail = ({ email, nextStep, prevStep }: VerifyEmailProps) => {
       </div>
 
       {/* OTP Inputs */}
-      <div className="flex justify-center gap-3 mb-4" onPaste={handlePaste}>
+      {/* ✅ shake class applied to wrapper, red border on each input when error */}
+      <div
+        className={`flex justify-center gap-3 mb-4 ${isShaking ? "shake" : ""}`}
+        onPaste={handlePaste}
+      >
         {otp.map((digit, i) => (
           <input
             key={i}
@@ -94,8 +153,12 @@ const VerifyEmail = ({ email, nextStep, prevStep }: VerifyEmailProps) => {
             onChange={(e) => handleChange(i, e.target.value)}
             onKeyDown={(e) => handleKeyDown(i, e)}
             className={`w-11 h-12 text-center text-lg font-semibold border-2 rounded-lg outline-none transition-colors
-              ${digit ? "border-blue-500 bg-blue-50" : "border-gray-200"}
-              ${error ? "border-red-400" : ""}
+              ${error
+                ? "border-red-500 bg-red-50 text-red-600"           // ✅ error state
+                : digit
+                  ? "border-blue-500 bg-blue-50 text-blue-600"      // filled state
+                  : "border-gray-200 text-blue-600"                  // empty state
+              }
               focus:border-blue-500`}
           />
         ))}
@@ -112,7 +175,7 @@ const VerifyEmail = ({ email, nextStep, prevStep }: VerifyEmailProps) => {
             <button
               onClick={handleResend}
               disabled={isResending}
-              className="text-blue-600 text-sm hover:underline disabled:opacity-50"
+              className="cursor-pointer text-blue-600 text-sm hover:underline disabled:opacity-50"
             >
               {isResending ? "Sending..." : "Didn't receive a code? Resend"}
             </button>
@@ -130,9 +193,17 @@ const VerifyEmail = ({ email, nextStep, prevStep }: VerifyEmailProps) => {
         </button>
         <button
           onClick={handleVerify}
-          className="flex-1 py-2.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+          disabled={isLoading}
+          className="flex-1 py-2.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition flex items-center justify-center gap-2 disabled:opacity-70"
         >
-          Verify & Continue
+          {isLoading ? (
+            <>
+              <Loader className="w-4 h-4 animate-spin" />
+              Verifying...
+            </>
+          ) : (
+            <>Verify & Continue</>
+          )}
         </button>
       </div>
     </div>

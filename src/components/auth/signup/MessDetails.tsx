@@ -1,8 +1,12 @@
+"use client";
+
 import { IRegister } from "@/src/types/register";
-import { Building2, MapPin, FileText, Users, ArrowRight, ArrowLeft } from "lucide-react";
+import { Building2, MapPin, FileText, Users, ArrowRight, ArrowLeft, Loader } from "lucide-react";
 import { ChangeEvent } from "react";
 import StepIndicator from "./StepIndicator";
 import FormInput from "../../lib/FormInput";
+import { useVerifyEmailMutation } from "@/src/redux/features/auth/authApi";
+import toast from "react-hot-toast";
 
 interface Props {
     formData: IRegister;
@@ -12,8 +16,22 @@ interface Props {
 }
 
 const MessDetails = ({ formData, handleChange, nextStep, prevStep }: Props) => {
+    const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
     const isValid = formData.messName && formData.messAddress && formData.approxTotalMembers >= 1;
+    const handleVerifyEmail = async () => {
+        try {
+            const res = await verifyEmail({ email: formData.email }).unwrap();
+            if (res.success) {
+                toast.success("OTP sent to your email! Please check and verify.")
+            } else {
+                toast.error("Failed to send OTP. Please try again.")
+            }
+            nextStep()
 
+        } catch (err) {
+            console.error("Email verification failed:", err);
+        }
+    };
     return (
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden">
             {/* Header */}
@@ -65,7 +83,7 @@ const MessDetails = ({ formData, handleChange, nextStep, prevStep }: Props) => {
                 <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex gap-2">
                     <Building2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                     <p className="text-xs text-blue-600 leading-relaxed">
-                        You'll become the <strong>admin</strong> of this mess. You can invite members after setup.
+                        You will become the <strong>admin</strong> of this mess. You can invite members after setup.
                     </p>
                 </div>
 
@@ -78,11 +96,11 @@ const MessDetails = ({ formData, handleChange, nextStep, prevStep }: Props) => {
                         <ArrowLeft className="w-4 h-4" /> Back
                     </button>
                     <button
-                        onClick={nextStep}
+                        onClick={handleVerifyEmail}
                         disabled={!isValid}
                         className="flex-1 bg-linear-to-r from-blue-500 to-blue-700 text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition disabled:opacity-40"
                     >
-                        Next <ArrowRight className="w-4 h-4" />
+                        Next {isLoading ? <Loader className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                     </button>
                 </div>
             </div>

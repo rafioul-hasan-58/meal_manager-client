@@ -14,14 +14,17 @@ export interface IRegister {
   approxTotalMembers: number;
 }
 
+
+// ── Registration Response ───────────────────────────────────────────────
 export interface IRegisterResponse {
   success: boolean;
   statusCode: number;
   message: string;
   data: {
-    message: string;
+    accessToken: string;
   };
 }
+
 
 export interface IRegisterPayload {
   fullName: string;

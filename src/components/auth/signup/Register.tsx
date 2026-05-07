@@ -6,6 +6,9 @@ import CreateAccount from "./CreateAccount";
 import MessDetails from "./MessDetails";
 import ReviewProfile from "./ReviewProfile";
 import VerifyEmail from "./VerifyEmail"; // 👈 new import
+import { useRegisterMutation } from "@/src/redux/features/user/userApi";
+import toast from "react-hot-toast";
+import { decodeToken } from "@/src/utils/jwtdecoder";
 
 
 const Register = () => {
@@ -13,6 +16,7 @@ const Register = () => {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
+  const [register, { isLoading }] = useRegisterMutation();
   const [formData, setFormData] = useState<IRegister>({
     fullName: "",
     email: "",
@@ -51,8 +55,32 @@ const Register = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("Submitting:", formData);
-    // TODO: wire up your registerMutation here
+    try {
+      const response = await register({
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+        messName: formData.messName,
+        messAddress: formData.messAddress,
+        messDescription: formData.messDescription,
+        approxTotalMembers: formData.approxTotalMembers,
+      }).unwrap();
+
+      if (response.success) {
+        toast.success("User registered successfully!");
+        console.log("Access Token:", response.data.accessToken);
+        const decodedToken = decodeToken(response.data.accessToken);
+        window.location.href=`/dashboard/${decodedToken.globalRole === "admin" ? "admin" : "user"}`; // Redirect based on role
+      }
+    } catch (err: any) {
+      const errorMessage =
+        err?.data?.message ||
+        err?.data?.errorMessages?.[0]?.message ||
+        "Registration failed. Please try again.";
+        console.log("Registration Error:", err);
+      toast.error(errorMessage);
+    }
   };
 
   const renderStep = () => {
@@ -78,7 +106,7 @@ const Register = () => {
             prevStep={prevStep}
           />
         );
-      case 4:                       
+      case 4:
         return (
           <VerifyEmail
             email={formData.email}
@@ -86,14 +114,13 @@ const Register = () => {
             prevStep={prevStep}
           />
         );
-      case 5:                       
+      case 5:
         return (
           <ReviewProfile
             formData={formData}
             onSubmit={handleSubmit}
             prevStep={prevStep}
-            isLoading={false}
-          />
+            isLoading={isLoading} />
         );
       default:
         return null;

@@ -5,8 +5,9 @@ export const API_ENDPOINTS = {
     },
     AUTH: {
         CREATE_ACCOUNT: "/auth/create-account",
+        VERIFY_EMAIL: "/auth/verify-email",
+        VERIFY_OTP: "/auth/verify-otp",
         LOGIN: "/auth/login",
-        EMAIL_VERIFY: "/auth/email-verify",
         RESEND_OTP: "/auth/resend-otp",
         FORGOT_PASSWORD: "/auth/forgot-password",
         VERIFY_RESET_PASSWORD_OTP: "/auth/verify-reset-password-otp",
