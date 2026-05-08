@@ -1,6 +1,6 @@
 "use client";
 
-import { IRegister } from "@/src/types/register";
+import { IRegister } from "@/src/types/registerType";
 import { Building2, MapPin, FileText, Users, ArrowRight, ArrowLeft, Loader } from "lucide-react";
 import { ChangeEvent } from "react";
 import StepIndicator from "./StepIndicator";

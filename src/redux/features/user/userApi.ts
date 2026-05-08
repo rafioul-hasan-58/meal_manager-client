@@ -1,7 +1,7 @@
 // redux/features/auth/authApi.ts
 import { API_ENDPOINTS } from "@/src/config/api";
 import { baseApi } from "../../api/baseApi";
-import { IRegisterPayload, IRegisterResponse } from "@/src/types/register";
+import { IRegisterPayload, IRegisterResponse } from "@/src/types/registerType";
 
 const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({

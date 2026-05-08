@@ -1,5 +1,5 @@
 "use client";
-import { IRegister } from "@/src/types/register";
+import { IRegister } from "@/src/types/registerType";
 import { useState } from "react";
 import WelcomeScreen from "./WelcomeScreen";
 import CreateAccount from "./CreateAccount";

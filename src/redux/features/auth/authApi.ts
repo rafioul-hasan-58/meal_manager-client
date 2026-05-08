@@ -1,12 +1,11 @@
 // redux/features/auth/authApi.ts
 import { API_ENDPOINTS } from "@/src/config/api";
 import { baseApi } from "../../api/baseApi";
-import { IOtpPayload, IOtpResponse, IVerifyOtpPayload, IVerifyOtpResponse } from "@/src/types/auth";
+import { ILoginPayload, ILoginResponse, IOtpPayload, IOtpResponse, IVerifyOtpPayload, IVerifyOtpResponse } from "@/src/types/authType";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-
-    // Login with email/password
+    // verify user email
     verifyEmail: builder.mutation<IOtpResponse, IOtpPayload>({
       query: (payload) => ({
         url: API_ENDPOINTS.AUTH.VERIFY_EMAIL,
@@ -15,6 +14,7 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["auth"],
     }),
+    // verify otp code
     verifyOtp: builder.mutation<IVerifyOtpResponse, IVerifyOtpPayload>({
       query: (payload) => ({
         url: API_ENDPOINTS.AUTH.VERIFY_OTP,
@@ -23,9 +23,10 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["auth"],
     }),
-    login: builder.mutation({
+    // login with email and password
+    login: builder.mutation<ILoginResponse,ILoginPayload>({
       query: (authInfo) => ({
-        url: "/auth/login",
+        url: API_ENDPOINTS.AUTH.LOGIN,
         method: "POST",
         body: authInfo,
       }),

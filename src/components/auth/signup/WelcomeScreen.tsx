@@ -1,4 +1,4 @@
-import { UtensilsCrossed, ArrowRight } from "lucide-react";
+import {  ArrowRight } from "lucide-react";
 import logo from "../../../assets/logo.png"
 import Image from "next/image";
 interface Props {
@@ -20,7 +20,7 @@ const WelcomeScreen = ({ nextStep }: Props) => {
 
                 {/* Body */}
                 <div className="px-8 py-8 text-center">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-2">Welcome Aboard! 👋</h2>
+                    <h2 className="text-xl font-semibold text-gray-800 mb-2">Welcome Aboard!</h2>
                     <p className="text-gray-500 text-sm leading-relaxed mb-8">
                         Set up your mess account in just a few steps. Manage meals, members,
                         and monthly costs with ease.
@@ -45,7 +45,7 @@ const WelcomeScreen = ({ nextStep }: Props) => {
                         Get Started <ArrowRight className="w-4 h-4" />
                     </button>
 
-                    <p className="text-xs text-gray-400 mt-4">
+                    <p className="text-sm text-gray-400 mt-4">
                         Already have an account?{" "}
                         <a href="/login" className="text-blue-600 hover:underline font-medium">
                             Sign in

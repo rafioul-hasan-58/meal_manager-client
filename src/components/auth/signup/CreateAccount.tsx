@@ -1,4 +1,4 @@
-import { IRegister } from "@/src/types/register";
+import { IRegister } from "@/src/types/registerType";
 import { User, Mail, Lock, Phone, Camera, ArrowRight, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, useRef } from "react";

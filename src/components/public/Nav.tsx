@@ -41,7 +41,7 @@ const Nav = () => {
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
 
         {/* Logo */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 cursor-pointer">
           <Image className="rounded-sm" src={logo} alt="App logo" height={50} width={50} />
           <h1 className="text-xl font-semibold text-white hidden md:block tracking-wide">
             Meal Management System

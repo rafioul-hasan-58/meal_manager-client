@@ -1,4 +1,4 @@
-import { IRegister } from "@/src/types/register";
+import { IRegister } from "@/src/types/registerType";
 import { User, Mail, Phone, Building2, MapPin, Users, ArrowLeft, CheckCircle } from "lucide-react";
 import Image from "next/image";
 import StepIndicator from "./StepIndicator";
