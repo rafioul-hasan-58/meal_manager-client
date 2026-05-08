@@ -65,14 +65,14 @@ const Hero = () => {
                 </ul>
 
                 {/* Buttons */}
-                <div className="flex gap-4 flex-wrap mb-6">
+                <div className="flex  gap-4 flex-wrap mb-6">
                     <Link href="/register">
-                        <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-7 py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
+                        <button className="flex items-center gap-2 bg-linear-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-7 py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
                             Get Started <ArrowRight size={16} />
                         </button>
                     </Link>
                     <Link href="/login">
-                        <button className="border border-blue-500 hover:bg-blue-500/10 px-8 py-3 rounded-lg text-blue-400 font-semibold transition-all duration-200 cursor-pointer">
+                        <button className="border flex-1 border-blue-500 hover:bg-blue-500/10 px-16 py-3 rounded-lg text-blue-400 font-semibold transition-all duration-200 cursor-pointer">
                             Login
                         </button>
                     </Link>
