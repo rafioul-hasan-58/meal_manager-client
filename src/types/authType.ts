@@ -38,3 +38,18 @@ export interface ILoginPayload {
   password: string;
 }
 
+// ── Forgot Password Payload ────────────────────────────────────────────────
+export interface IForgotPasswordPayload {
+  email: string;
+}
+
+// ── Forgot Password Response ───────────────────────────────────────────────
+export interface IForgotPasswordResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    message: string;
+  };
+}
+

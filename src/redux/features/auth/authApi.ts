@@ -1,7 +1,7 @@
 // redux/features/auth/authApi.ts
 import { API_ENDPOINTS } from "@/src/config/api";
 import { baseApi } from "../../api/baseApi";
-import { ILoginPayload, ILoginResponse, IOtpPayload, IOtpResponse, IVerifyOtpPayload, IVerifyOtpResponse } from "@/src/types/authType";
+import { IForgotPasswordPayload, IForgotPasswordResponse, ILoginPayload, ILoginResponse, IOtpPayload, IOtpResponse, IVerifyOtpPayload, IVerifyOtpResponse } from "@/src/types/authType";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -24,7 +24,7 @@ const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["auth"],
     }),
     // login with email and password
-    login: builder.mutation<ILoginResponse,ILoginPayload>({
+    login: builder.mutation<ILoginResponse, ILoginPayload>({
       query: (authInfo) => ({
         url: API_ENDPOINTS.AUTH.LOGIN,
         method: "POST",
@@ -45,16 +45,6 @@ const authApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["auth"],
     }),
-
-    // Register new auth
-    register: builder.mutation({
-      query: (data) => ({
-        url: "/user/register",
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: ["auth"],
-    }),
     reSendOtp: builder.mutation({
       query: (authInfo) => ({
         url: "/auth/resend-otp",
@@ -65,12 +55,12 @@ const authApi = baseApi.injectEndpoints({
     }),
 
     // Forgot password
-    forgotPassword: builder.mutation({
-      query: (email) => {
+    forgotPassword: builder.mutation<IForgotPasswordResponse, IForgotPasswordPayload>({
+      query: (payload) => {
         return {
-          url: "/auth/forgot-password",
+          url: API_ENDPOINTS.AUTH.FORGOT_PASSWORD,
           method: "POST",
-          body: email,
+          body: payload,
         };
       },
     }),
@@ -135,7 +125,6 @@ export const {
   useVerifyEmailMutation,
   useLoginMutation,
   useLoginWithGoogleMutation,
-  useRegisterMutation,
   useVerifyOtpMutation,
   useReSendOtpMutation,
   useForgotPasswordMutation,
