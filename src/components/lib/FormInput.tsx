@@ -34,7 +34,7 @@ const FormInput = ({
 
     return (
         <div>
-            <label className="text-xs font-medium text-gray-600 mb-1 block">{label}</label>
+            <label className="text-xs font-medium text-gray-400 mb-1 block">{label}</label>
             <div className="relative">
                 <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input

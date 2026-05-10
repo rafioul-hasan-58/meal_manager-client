@@ -9,6 +9,7 @@ type Step = "email" | "otp" | "reset";
 const ForgotPasswordScreen = () => {
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
 
   const handleEmailNext = (submittedEmail: string) => {
     setEmail(submittedEmail);
@@ -28,7 +29,7 @@ const ForgotPasswordScreen = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-blue-100">
+    <div className="min-h-screen flex items-center justify-center bg-[#0f172a]">
       {step === "email" && (
         <ForgotPasswordEmail onNext={handleEmailNext} />
       )}
@@ -37,11 +38,12 @@ const ForgotPasswordScreen = () => {
           email={email}
           onNext={handleOtpNext}
           onBack={handleOtpBack}
+          setToken={setToken}
         />
       )}
       {step === "reset" && (
         <ResetPassword
-          email={email}
+          token={token}
           onSuccess={handleResetSuccess}
         />
       )}

@@ -24,12 +24,12 @@ const CreateAccount = ({ formData, handleChange, handlePhotoUpload, nextStep, pr
         formData.phone;
 
     return (
-        <div className="bg-white lg:rounded-2xl lg:shadow-xl w-full max-w-md lg:mx-4 overflow-hidden">
+        <div className="bg-[#1e293b] border border-[#334155] rounded-2xl shadow-2xl w-full max-w-md lg:mx-4 overflow-hidden">
             {/* Header */}
-            <div className="bg-linear-to-r from-blue-500 to-blue-700 px-8 pt-6 pb-4">
+            <div className="bg-blue-700 px-8 pt-6 pb-4">
                 <StepIndicator currentStep={2} />
-                <h2 className="text-white text-lg font-semibold text-center">Create Your Account</h2>
-                <p className="text-blue-100 text-xs text-center mt-0.5">Fill in your personal details</p>
+                <h2 className="text-slate-100 text-lg font-semibold text-center">Create Your Account</h2>
+                <p className="text-blue-200 text-xs text-center mt-0.5">Fill in your personal details</p>
             </div>
 
             <div className="px-8 py-6 space-y-4">
@@ -38,25 +38,26 @@ const CreateAccount = ({ formData, handleChange, handlePhotoUpload, nextStep, pr
                     <button
                         type="button"
                         onClick={() => fileRef.current?.click()}
-                        className="relative w-20 h-20 rounded-full border-2 border-dashed border-blue-300 hover:border-blue-500 bg-blue-50 flex items-center justify-center overflow-hidden transition-colors group"
+                        className="relative w-20 h-20 rounded-full border-2 border-dashed border-blue-800 hover:border-blue-500 bg-blue-900/50 flex items-center justify-center overflow-hidden transition-colors group"
                     >
                         {formData.photoPreview ? (
                             <Image src={formData.photoPreview} alt="Preview" fill className="object-cover" />
                         ) : (
                             <div className="flex flex-col items-center gap-1">
-                                <Camera className="w-5 h-5 text-blue-400 group-hover:text-blue-600" />
-                                <span className="text-[9px] text-blue-400 group-hover:text-blue-600">Photo</span>
+                                <Camera className="w-5 h-5 text-blue-400 group-hover:text-blue-300" />
+                                <span className="text-[9px] text-blue-400 group-hover:text-blue-300">Photo</span>
                             </div>
                         )}
                     </button>
                     <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
                 </div>
+
                 {[
-                    { name: "fullName", label: "Full Name", type: "text", icon: User, placeholder: "John Doe", showPasswordToggle: false },
-                    { name: "email", label: "Email", type: "email", icon: Mail, placeholder: "john@example.com", showPasswordToggle: false },
-                    { name: "phone", label: "Phone", type: "tel", icon: Phone, placeholder: "+880 1700 000000", showPasswordToggle: false },
-                    { name: "password", label: "Password", type: "password", icon: Lock, placeholder: "Min. 8 characters", showPasswordToggle: true },
-                    { name: "confirmPassword", label: "Confirm Password", type: "password", icon: Lock, placeholder: "Repeat password", showPasswordToggle: true },
+                    { name: "fullName", label: "Full Name", type: "text", icon: User, placeholder: "Your Full Name", showPasswordToggle: false },
+                    { name: "email", label: "Email", type: "email", icon: Mail, placeholder: "Your Email Address", showPasswordToggle: false },
+                    { name: "phone", label: "Phone", type: "tel", icon: Phone, placeholder: "Your Phone Number", showPasswordToggle: false },
+                    { name: "password", label: "Password", type: "password", icon: Lock, placeholder: "Your Password", showPasswordToggle: true },
+                    { name: "confirmPassword", label: "Confirm Password", type: "password", icon: Lock, placeholder: "Retype Your Password", showPasswordToggle: true },
                 ].map(({ name, label, type, icon, placeholder, showPasswordToggle }) => (
                     <FormInput
                         key={name}
@@ -64,6 +65,7 @@ const CreateAccount = ({ formData, handleChange, handlePhotoUpload, nextStep, pr
                         label={label}
                         type={type}
                         icon={icon}
+                        className="text-white "
                         placeholder={placeholder}
                         value={formData[name as keyof IRegister] as string}
                         onChange={handleChange}
@@ -80,14 +82,14 @@ const CreateAccount = ({ formData, handleChange, handlePhotoUpload, nextStep, pr
                 <div className="flex gap-3 pt-2">
                     <button
                         onClick={prevStep}
-                        className="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition"
+                        className="flex-1 border border-[#334155] text-slate-400 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:bg-[#0f172a] hover:text-slate-200 transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" /> Back
                     </button>
                     <button
                         onClick={nextStep}
                         disabled={!isValid}
-                        className="flex-1 bg-linear-to-r from-blue-500 to-blue-700 text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition disabled:opacity-40"
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                         Next <ArrowRight className="w-4 h-4" />
                     </button>

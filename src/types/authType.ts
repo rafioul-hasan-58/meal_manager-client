@@ -52,4 +52,27 @@ export interface IForgotPasswordResponse {
     message: string;
   };
 }
+// Redux Response Type
+export interface IForgotOtpVerifyResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    accessToken: string;
+  };
+}
 
+// Redux Payload Type
+export interface IResetPasswordPayload {
+  email: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+
+// Redux Response Type
+export interface IResetPasswordResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+}

@@ -1,7 +1,7 @@
 // redux/features/auth/authApi.ts
 import { API_ENDPOINTS } from "@/src/config/api";
 import { baseApi } from "../../api/baseApi";
-import { IForgotPasswordPayload, IForgotPasswordResponse, ILoginPayload, ILoginResponse, IOtpPayload, IOtpResponse, IVerifyOtpPayload, IVerifyOtpResponse } from "@/src/types/authType";
+import { IForgotOtpVerifyResponse, IForgotPasswordPayload, IForgotPasswordResponse, ILoginPayload, ILoginResponse, IOtpPayload, IOtpResponse, IResetPasswordPayload, IResetPasswordResponse, IVerifyOtpPayload, IVerifyOtpResponse } from "@/src/types/authType";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,6 +18,14 @@ const authApi = baseApi.injectEndpoints({
     verifyOtp: builder.mutation<IVerifyOtpResponse, IVerifyOtpPayload>({
       query: (payload) => ({
         url: API_ENDPOINTS.AUTH.VERIFY_OTP,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["auth"],
+    }),
+    verifyForgotOtp: builder.mutation<IForgotOtpVerifyResponse, IVerifyOtpPayload>({
+      query: (payload) => ({
+        url: API_ENDPOINTS.AUTH.VERIFY_FORGOT_PASSWORD_OTP,
         method: "POST",
         body: payload,
       }),
@@ -45,14 +53,6 @@ const authApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["auth"],
     }),
-    reSendOtp: builder.mutation({
-      query: (authInfo) => ({
-        url: "/auth/resend-otp",
-        method: "POST",
-        body: authInfo,
-      }),
-      invalidatesTags: ["auth"],
-    }),
 
     // Forgot password
     forgotPassword: builder.mutation<IForgotPasswordResponse, IForgotPasswordPayload>({
@@ -64,43 +64,19 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
-
-    // Reset password (with token from email)
-    newPassword: builder.mutation({
-      query: (authInfo) => ({
-        url: "/auth/reset-password",
-        method: "POST",
-        body: authInfo,
-      }),
-    }),
-
     // Change password (authenticated auth)
-    resetPassword: builder.mutation({
+    resetPassword: builder.mutation<IResetPasswordResponse, IResetPasswordPayload>({
       query: (authInfo) => ({
-        url: "/auth/change-password",
-        method: "PATCH",
-        body: authInfo,
+        url: API_ENDPOINTS.AUTH.RESET_PASSWORD,
+        method: "POST",
+        body: {
+          email: authInfo.email,
+          newPassword: authInfo.newPassword,
+          confirmPassword: authInfo.confirmPassword
+        },
       }),
       invalidatesTags: ["auth"],
-    }),
 
-    // Get current auth profile
-    getMe: builder.query({
-      query: () => ({
-        url: "/user/my-profile",
-        method: "GET",
-      }),
-      providesTags: ["auth", "profile"],
-    }),
-
-    // Update auth profile
-    updateauth: builder.mutation({
-      query: (formData) => ({
-        url: "/auth/update-profile",
-        method: "PATCH",
-        body: formData,
-      }),
-      invalidatesTags: ["auth", "profile"],
     }),
     updateProfile: builder.mutation({
       query: (formData) => ({
@@ -126,12 +102,9 @@ export const {
   useLoginMutation,
   useLoginWithGoogleMutation,
   useVerifyOtpMutation,
-  useReSendOtpMutation,
+  useVerifyForgotOtpMutation,
   useForgotPasswordMutation,
-  useNewPasswordMutation,
   useResetPasswordMutation,
-  useGetMeQuery,
-  useUpdateauthMutation,
   useUpdateProfileMutation,
   useUserUpdateProfileNotificationMutation,
 } = authApi;
