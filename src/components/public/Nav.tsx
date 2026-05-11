@@ -26,7 +26,7 @@ const guestLinks = [
 ]
 
 const userLinks = [
-  { href: "/customer/dashboard", icon: LayoutDashboard, label: "Dashboard", desc: "Overview & stats" },
+  { href: "/dashboard/user", icon: LayoutDashboard, label: "Dashboard", desc: "Overview & stats" },
   { href: "/customer/dashboard/meals", icon: UtensilsCrossed, label: "My Meals", desc: "Browse meal plans" },
   { href: "/customer/dashboard/orders", icon: ShoppingBag, label: "My Orders", desc: "Track your orders" },
   { href: "/customer/dashboard/settings", icon: Settings, label: "Settings", desc: "Account preferences" },
@@ -72,7 +72,7 @@ const Nav = () => {
                     </Avatar>
                     <div className="min-w-0">
                       <SheetTitle className="text-white text-sm font-semibold leading-tight text-left">
-                        Sourav Islam
+                        Sourav Prodhan
                       </SheetTitle>
                       <p className="text-sky-400 text-xs italic mt-0.5">Customer</p>
                       <p className="text-white/40 text-xs truncate mt-0.5">sourav@example.com</p>

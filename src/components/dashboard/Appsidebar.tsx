@@ -42,6 +42,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
     { label: "Dashboard", href: "/dashboard/user", icon: LayoutDashboard, roles: ["ADMIN", "USER"] },
     { label: "Members", href: "/dashboard/admin/members", icon: Users, roles: ["ADMIN"] },
+    { label: "Match Members", href: "/dashboard/user/match-members", icon: Users, roles: ["USER"] },
     { label: "Meals", href: "/dashboard/admin/meals", icon: UtensilsCrossed, roles: ["ADMIN"] },
     { label: "Expenses", href: "/dashboard/admin/expenses", icon: Receipt, roles: ["ADMIN"] },
     { label: "Dues", href: "/dashboard/admin/dues", icon: CreditCard, roles: ["ADMIN"] },
