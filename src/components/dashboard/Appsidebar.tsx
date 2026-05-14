@@ -120,8 +120,8 @@ export function AppSidebar({ role, userName = "User", userAvatar }: AppSidebarPr
                     >
                         <Menu className="w-5 h-5" />
                     </button>
-                    <div className="w-7 h-7 rounded-md bg-indigo-500 flex items-center justify-center overflow-hidden">
-                        <Image src={logo} alt="logo" width={28} height={28} className="rounded-sm" />
+                    <div className="w-7 h-7 rounded-sm bg-indigo-500 flex items-center justify-center overflow-hidden">
+                        <Image src={logo} alt="logo" width={28} height={28}  />
                     </div>
                     <span className="text-white font-semibold text-sm tracking-wide">Meal Matrix</span>
                 </div>
@@ -235,7 +235,7 @@ export function AppSidebar({ role, userName = "User", userAvatar }: AppSidebarPr
                     className={cn(
                         "hidden md:flex relative flex-col h-screen bg-blue-600 border-r border-white/10",
                         "transition-all duration-300 ease-in-out",
-                        collapsed ? "w-[68px]" : "w-60"
+                        collapsed ? "w-16" : "w-64"
                     )}
                 >
                     {/* Logo */}
@@ -243,9 +243,9 @@ export function AppSidebar({ role, userName = "User", userAvatar }: AppSidebarPr
                         "flex items-center gap-3 px-4 py-5 border-b border-white/10",
                         collapsed && "justify-center px-2"
                     )}>
-                        <div className="shrink-0 w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center overflow-hidden">
+                        <div className="shrink-0 w-10 h-10 rounded-sm bg-indigo-500 flex items-center justify-center overflow-hidden">
                             <Link href="/">
-                                <Image className="cursor-pointer rounded-sm" src={logo} alt="logo" width={300} height={300} />
+                                <Image className="cursor-pointer rounded-sm" src={logo} alt="logo" width={320} height={320} />
                             </Link>
                         </div>
                         {!collapsed && (

@@ -29,7 +29,7 @@ const userLinks = [
   { href: "/dashboard/user", icon: LayoutDashboard, label: "Dashboard", desc: "Overview & stats" },
   { href: "/customer/dashboard/meals", icon: UtensilsCrossed, label: "My Meals", desc: "Browse meal plans" },
   { href: "/customer/dashboard/orders", icon: ShoppingBag, label: "My Orders", desc: "Track your orders" },
-  { href: "/customer/dashboard/settings", icon: Settings, label: "Settings", desc: "Account preferences" },
+  { href: "/dashboard/settings", icon: Settings, label: "Settings", desc: "Account preferences" },
 ]
 
 const Nav = () => {

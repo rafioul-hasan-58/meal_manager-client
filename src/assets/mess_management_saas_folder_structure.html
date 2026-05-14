@@ -1,0 +1,242 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-mono, monospace); font-size: 13px; }
+  .tree { padding: 16px 0; }
+  .node { display: flex; align-items: flex-start; line-height: 1.7; cursor: pointer; border-radius: 4px; padding: 1px 4px; transition: background .15s; }
+  .node:hover { background: var(--color-background-secondary); }
+  .indent { flex-shrink: 0; }
+  .icon { margin-right: 6px; flex-shrink: 0; font-size: 12px; width: 16px; display: inline-block; text-align: center; }
+  .label { color: var(--color-text-primary); font-weight: 400; }
+  .label.dir { color: var(--color-text-primary); font-weight: 500; }
+  .badge { margin-left: 8px; font-size: 10px; padding: 1px 6px; border-radius: 99px; font-family: var(--font-sans); font-weight: 500; flex-shrink: 0; }
+  .badge.admin { background: #EEEDFE; color: #3C3489; }
+  .badge.feature { background: #E1F5EE; color: #085041; }
+  .badge.auth { background: #FAECE7; color: #993C1D; }
+  .badge.shared { background: #FAEEDA; color: #633806; }
+  .badge.saas { background: #FBEAF0; color: #72243E; }
+  @media (prefers-color-scheme: dark) {
+    .badge.admin { background: #26215C; color: #CECBF6; }
+    .badge.feature { background: #04342C; color: #9FE1CB; }
+    .badge.auth { background: #4A1B0C; color: #F5C4B3; }
+    .badge.shared { background: #412402; color: #FAC775; }
+    .badge.saas { background: #4B1528; color: #F4C0D1; }
+  }
+  .comment { color: var(--color-text-tertiary); font-size: 11px; margin-left: 6px; font-family: var(--font-sans); }
+  .section-label { font-family: var(--font-sans); font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--color-text-tertiary); padding: 12px 4px 4px; }
+  .collapsible > .children { overflow: hidden; transition: max-height .25s ease; }
+  .collapsible.closed > .children { max-height: 0 !important; }
+  .toggle-icon { font-style: normal; display: inline-block; transition: transform .2s; width: 12px; }
+  .closed .toggle-icon { transform: rotate(-90deg); }
+  .root-title { font-family: var(--font-sans); font-size: 15px; font-weight: 500; color: var(--color-text-primary); padding: 4px 4px 14px; display: flex; align-items: center; gap: 8px; }
+</style>
+<div style="padding: 8px 0;">
+  <div class="root-title">📁 mess-management-saas/ <span class="badge saas">SaaS</span></div>
+  <div id="tree" class="tree"></div>
+</div>
+<script>
+const tree = [
+  { name: "app/", type: "dir", badge: null, comment: "Next.js App Router root", children: [
+    { name: "(auth)/", type: "dir", badge: "auth", comment: "Auth group", children: [
+      { name: "login/page.tsx", type: "file" },
+      { name: "register/page.tsx", type: "file" },
+      { name: "forgot-password/page.tsx", type: "file" },
+      { name: "layout.tsx", type: "file", comment: "Auth layout" }
+    ]},
+    { name: "(public)/", type: "dir", badge: "saas", comment: "Landing / marketing", children: [
+      { name: "page.tsx", type: "file", comment: "Landing page" },
+      { name: "pricing/page.tsx", type: "file" },
+      { name: "layout.tsx", type: "file" }
+    ]},
+    { name: "(dashboard)/", type: "dir", badge: "feature", comment: "Mess member area", children: [
+      { name: "layout.tsx", type: "file", comment: "Sidebar + navbar" },
+      { name: "dashboard/page.tsx", type: "file", comment: "Overview stats" },
+      { name: "meal/", type: "dir", children: [
+        { name: "page.tsx", type: "file", comment: "Today's meal + total" },
+        { name: "add/page.tsx", type: "file", comment: "Add meal" },
+        { name: "undo/page.tsx", type: "file", comment: "Undo last meal" },
+        { name: "history/page.tsx", type: "file" }
+      ]},
+      { name: "bazar/", type: "dir", children: [
+        { name: "page.tsx", type: "file", comment: "Bazar list" },
+        { name: "add/page.tsx", type: "file", comment: "Add bazar entry" }
+      ]},
+      { name: "cooking-schedule/", type: "dir", children: [
+        { name: "page.tsx", type: "file", comment: "View schedule" }
+      ]},
+      { name: "members/", type: "dir", children: [
+        { name: "page.tsx", type: "file", comment: "Member list" }
+      ]},
+      { name: "profile/page.tsx", type: "file" }
+    ]},
+    { name: "(manager)/", type: "dir", badge: "admin", comment: "Manager role area", children: [
+      { name: "layout.tsx", type: "file", comment: "Manager guard" },
+      { name: "manager/", type: "dir", children: [
+        { name: "page.tsx", type: "file", comment: "Manager dashboard" },
+        { name: "members/", type: "dir", children: [
+          { name: "page.tsx", type: "file", comment: "Add / remove members" },
+          { name: "assign-manager/page.tsx", type: "file", comment: "Make as manager" }
+        ]},
+        { name: "meal/", type: "dir", children: [
+          { name: "page.tsx", type: "file", comment: "Total meal overview" },
+          { name: "approve/page.tsx", type: "file" }
+        ]},
+        { name: "bazar/", type: "dir", children: [
+          { name: "page.tsx", type: "file", comment: "Bazar management" },
+          { name: "summary/page.tsx", type: "file", comment: "Cost summary" }
+        ]},
+        { name: "cooking-schedule/", type: "dir", children: [
+          { name: "page.tsx", type: "file", comment: "Create schedule" },
+          { name: "assign/page.tsx", type: "file", comment: "Assign cook" }
+        ]},
+        { name: "settings/page.tsx", type: "file", comment: "Mess settings" }
+      ]}
+    ]},
+    { name: "(super-admin)/", type: "dir", badge: "admin", comment: "SaaS admin panel", children: [
+      { name: "layout.tsx", type: "file", comment: "Super admin guard" },
+      { name: "admin/", type: "dir", children: [
+        { name: "page.tsx", type: "file", comment: "Admin dashboard" },
+        { name: "messes/", type: "dir", children: [
+          { name: "page.tsx", type: "file", comment: "All messes" },
+          { name: "[messId]/page.tsx", type: "file" }
+        ]},
+        { name: "users/", type: "dir", children: [
+          { name: "page.tsx", type: "file", comment: "All users" },
+          { name: "[userId]/page.tsx", type: "file" }
+        ]},
+        { name: "subscriptions/page.tsx", type: "file", comment: "Plans & billing" },
+        { name: "analytics/page.tsx", type: "file" }
+      ]}
+    ]},
+    { name: "api/", type: "dir", badge: "shared", comment: "API routes", children: [
+      { name: "auth/[...nextauth]/route.ts", type: "file" },
+      { name: "meal/route.ts", type: "file" },
+      { name: "bazar/route.ts", type: "file" },
+      { name: "members/route.ts", type: "file" },
+      { name: "cooking-schedule/route.ts", type: "file" },
+      { name: "webhook/route.ts", type: "file", comment: "Payment webhook" }
+    ]},
+    { name: "layout.tsx", type: "file", comment: "Root layout" },
+    { name: "globals.css", type: "file" }
+  ]},
+  { name: "components/", type: "dir", badge: "shared", comment: "Reusable UI", children: [
+    { name: "ui/", type: "dir", comment: "Shadcn-style primitives", children: [
+      { name: "button.tsx", type: "file" },
+      { name: "modal.tsx", type: "file" },
+      { name: "table.tsx", type: "file" },
+      { name: "badge.tsx", type: "file" }
+    ]},
+    { name: "layout/", type: "dir", children: [
+      { name: "Sidebar.tsx", type: "file" },
+      { name: "Navbar.tsx", type: "file" },
+      { name: "ManagerSidebar.tsx", type: "file" }
+    ]},
+    { name: "meal/", type: "dir", children: [
+      { name: "MealCard.tsx", type: "file" },
+      { name: "MealForm.tsx", type: "file" },
+      { name: "UndoMeal.tsx", type: "file" }
+    ]},
+    { name: "bazar/", type: "dir", children: [
+      { name: "BazarForm.tsx", type: "file" },
+      { name: "BazarList.tsx", type: "file" }
+    ]},
+    { name: "members/", type: "dir", children: [
+      { name: "MemberCard.tsx", type: "file" },
+      { name: "AddMemberForm.tsx", type: "file" },
+      { name: "RoleToggle.tsx", type: "file", comment: "Make as manager" }
+    ]},
+    { name: "cooking-schedule/", type: "dir", children: [
+      { name: "ScheduleCalendar.tsx", type: "file" },
+      { name: "AssignCookForm.tsx", type: "file" }
+    ]}
+  ]},
+  { name: "lib/", type: "dir", badge: "shared", comment: "Core logic", children: [
+    { name: "db.ts", type: "file", comment: "Prisma / DB client" },
+    { name: "auth.ts", type: "file", comment: "NextAuth config" },
+    { name: "roles.ts", type: "file", comment: "Role guards" },
+    { name: "utils.ts", type: "file" },
+    { name: "validations/", type: "dir", children: [
+      { name: "meal.ts", type: "file" },
+      { name: "bazar.ts", type: "file" },
+      { name: "member.ts", type: "file" }
+    ]}
+  ]},
+  { name: "hooks/", type: "dir", badge: "shared", children: [
+    { name: "useMeal.ts", type: "file" },
+    { name: "useBazar.ts", type: "file" },
+    { name: "useMembers.ts", type: "file" },
+    { name: "useRole.ts", type: "file", comment: "Role-aware hook" }
+  ]},
+  { name: "store/", type: "dir", badge: "shared", comment: "Zustand / state", children: [
+    { name: "mealStore.ts", type: "file" },
+    { name: "memberStore.ts", type: "file" }
+  ]},
+  { name: "prisma/", type: "dir", badge: "shared", children: [
+    { name: "schema.prisma", type: "file", comment: "DB schema" },
+    { name: "seed.ts", type: "file" }
+  ]},
+  { name: "types/", type: "dir", children: [
+    { name: "meal.ts", type: "file" },
+    { name: "member.ts", type: "file" },
+    { name: "bazar.ts", type: "file" },
+    { name: "roles.ts", type: "file" }
+  ]},
+  { name: "middleware.ts", type: "file", badge: "auth", comment: "Route protection" },
+  { name: "next.config.ts", type: "file" },
+  { name: ".env.local", type: "file", comment: "Secrets" }
+];
+
+function badge(b) {
+  if (!b) return '';
+  return `<span class="badge ${b}">${b}</span>`;
+}
+
+function renderTree(nodes, depth) {
+  let html = '';
+  for (const node of nodes) {
+    const isDir = node.type === 'dir';
+    const pad = depth * 18;
+    const hasChildren = isDir && node.children && node.children.length > 0;
+    const id = 'n' + Math.random().toString(36).slice(2);
+
+    if (hasChildren) {
+      html += `<div class="collapsible" id="${id}">
+        <div class="node" onclick="toggle('${id}')" style="padding-left:${pad}px">
+          <span class="toggle-icon">▾</span>
+          <span class="icon">${isDir ? '📂' : '📄'}</span>
+          <span class="label dir">${node.name}</span>
+          ${badge(node.badge)}
+          ${node.comment ? `<span class="comment">// ${node.comment}</span>` : ''}
+        </div>
+        <div class="children" style="max-height:9999px">
+          ${renderTree(node.children, depth + 1)}
+        </div>
+      </div>`;
+    } else {
+      html += `<div class="node" style="padding-left:${pad}px">
+        <span style="width:12px;display:inline-block"></span>
+        <span class="icon">${isDir ? '📁' : '📄'}</span>
+        <span class="label ${isDir ? 'dir' : ''}">${node.name}</span>
+        ${badge(node.badge)}
+        ${node.comment ? `<span class="comment">// ${node.comment}</span>` : ''}
+      </div>`;
+    }
+  }
+  return html;
+}
+
+function toggle(id) {
+  const el = document.getElementById(id);
+  const ch = el.querySelector('.children');
+  const icon = el.querySelector('.toggle-icon');
+  if (el.classList.contains('closed')) {
+    el.classList.remove('closed');
+    ch.style.maxHeight = '9999px';
+  } else {
+    el.classList.add('closed');
+    ch.style.maxHeight = '0';
+  }
+}
+
+document.getElementById('tree').innerHTML = renderTree(tree, 0);
+</script>

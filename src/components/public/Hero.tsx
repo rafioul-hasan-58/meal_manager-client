@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import analytics from "../../assets/hero-anylitycs.png";
 import Image from "next/image";
 import { Users, Percent, FileText, BarChart2, ShieldCheck, ArrowRight } from "lucide-react";
+import { useAppSelector } from "@/src/utils/hook";
+import { selectUser } from "@/src/redux/features/auth/authSlice";
 
 const features = [
     {
@@ -31,6 +35,7 @@ const features = [
 ];
 
 const Hero = () => {
+    const user = useAppSelector(selectUser);
     return (
         <section className="max-w-7xl mx-auto px-6 py-4 flex flex-col-reverse lg:flex-row items-center gap-12">
             {/* Left */}
@@ -65,18 +70,31 @@ const Hero = () => {
                 </ul>
 
                 {/* Buttons */}
-                <div className="flex  gap-4 flex-wrap mb-6">
-                    <Link href="/register">
-                        <button className="flex items-center gap-2 bg-linear-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-7 py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
-                            Get Started <ArrowRight size={16} />
-                        </button>
-                    </Link>
-                    <Link href="/login">
-                        <button className="border flex-1 border-blue-500 hover:bg-blue-500/10 px-16 py-3 rounded-lg text-blue-400 font-semibold transition-all duration-200 cursor-pointer">
-                            Login
-                        </button>
-                    </Link>
-                </div>
+                {
+                    user ? <div className="flex  gap-4 flex-wrap mb-6">
+                        <Link href={`/dashboard/${user.globalRole.toLocaleLowerCase()}`}>
+                            <button className="flex items-center gap-2 bg-linear-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-7 py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
+                                See Dashboard <ArrowRight size={16} />
+                            </button>
+                        </Link>
+                        <Link href="/dashboard/settings">
+                            <button className="border flex-1 border-blue-500 hover:bg-blue-500/10 px-16 py-3 rounded-lg text-blue-400 font-semibold transition-all duration-200 cursor-pointer">
+                                Settings
+                            </button>
+                        </Link>
+                    </div> : <div className="flex  gap-4 flex-wrap mb-6">
+                        <Link href="/register">
+                            <button className="flex items-center gap-2 bg-linear-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-7 py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer">
+                                Get Started <ArrowRight size={16} />
+                            </button>
+                        </Link>
+                        <Link href="/login">
+                            <button className="border flex-1 border-blue-500 hover:bg-blue-500/10 px-16 py-3 rounded-lg text-blue-400 font-semibold transition-all duration-200 cursor-pointer">
+                                Login
+                            </button>
+                        </Link>
+                    </div>
+                }
 
                 {/* Trust badge */}
                 <div className="flex items-center gap-2 text-gray-500 text-sm">
